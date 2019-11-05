@@ -1,0 +1,55 @@
+import Constants
+
+
+class Controller:
+    def __init__(self, model, view):
+        self.MODEL = model
+        self.VIEW = view
+        self.set_triggers()
+
+    def set_triggers(self):
+        self.VIEW._new_action.triggered.connect(self.new_file)
+        self.VIEW._markdown_action.triggered.connect(self.markdown_show)
+        self.VIEW._all_editors_action.triggered.connect(self.all_edits_show)
+        self.VIEW._HTML_action.triggered.connect(self.html_show)
+
+    def new_file(self):
+        self.MODEL.append_document("")
+        self.VIEW.add_tab(Constants.EMPTY_TITLE)
+        self.VIEW.change_active_tab(self.MODEL.ACTIVE_TAB)
+
+    def open_file(self):
+        pass
+
+    def save_file(self):
+        pass
+
+    def save_AS_file(self):
+        pass
+
+    def export_HTML(self):
+        pass
+
+    def add_image(self):
+        pass
+
+    def add_reference(self):
+        pass
+
+    def markdown_show(self):
+        markdown = self.VIEW.get_active_input()
+        html = self.VIEW.get_active_preview()
+        markdown.show()
+        html.hide()
+
+    def html_show(self):
+        markdown = self.VIEW.get_active_input()
+        html = self.VIEW.get_active_preview()
+        markdown.hide()
+        html.show()
+
+    def all_edits_show(self):
+        markdown = self.VIEW.get_active_input()
+        html = self.VIEW.get_active_preview()
+        markdown.show()
+        html.show()
