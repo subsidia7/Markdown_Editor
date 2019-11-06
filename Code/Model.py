@@ -8,8 +8,8 @@ class Model:
         self.FILE_PATH = Constants.EMPTY_PATH
         self.TABS = [{"path": ""}]
 
-    def get_file_name(self):
-        splitted = self.FILE_PATH.split('/')
+    def get_file_name(self, file_path):
+        splitted = file_path.split("/")
         return splitted[-1]
 
     def append_document(self, file_path):
@@ -26,9 +26,9 @@ class Model:
             # f = open(filename, 'r')
             with open(filename, "r") as f:
                 return f.read()
-        except:
-            # print ("get_file_content_utf8")
-            # print (str(e))
+        except Exception as e:
+            print ("get_file_content_utf8")
+            print (str(e))
             return False
 
     # Открыт ли документ (есть ли в табах)
@@ -37,3 +37,6 @@ class Model:
             if self.TABS[ix]["path"] == file_path:
                 return ix
         return -1
+
+    def set_document_path(self, file_path):
+        self.FILE_PATH = file_path

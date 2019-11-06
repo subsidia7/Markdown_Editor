@@ -2,8 +2,7 @@ import Model
 import Constants
 from PyQt5.QtWidgets import QMainWindow, QWidget, QAction, QMenu, QFileDialog, QTextEdit, QLabel, QGridLayout, \
     QDesktopWidget, QHBoxLayout, QTabWidget, QLineEdit, QFormLayout, QPushButton
-from PyQt5.QtCore import QPoint
-
+from PyQt5 import QtCore
 
 class TextEditor(QTextEdit):
     def __init__(self):
@@ -93,12 +92,16 @@ class View(QMainWindow):
         tab.setLayout(tab_h_box)
 
     def select_file(self):
-        fname = QFileDialog.getOpenFileName(self, 'Select file', "", "*.md")
-        print( "Selected file: " + fname )
+        fname, _filter = QFileDialog.getOpenFileName(self, 'Select file', "", "*.md")
+        print( "Selected file: " + fname)
         if fname:
             return fname
         else:
             return False
+
+    def set_document(self, document):
+        inputEdit = self.get_active_input()
+        inputEdit.setText(document)
 
     def get_active_input(self):
         return self.tabs.currentWidget().layout().itemAt(0).widget()# эта херота вернет input_edit которая для маркдауна

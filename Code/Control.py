@@ -73,14 +73,16 @@ class Controller:
         if doc_ix != -1:
             self.MODEL.ACTIVE_TAB = doc_ix
             self.VIEW.change_active_tab(self.MODEL.ACTIVE_TAB)
-        else :
+        else:
             self.MODEL.append_document(file_path)
+            '''
+            uis = self.VIEW.add_tab(self.MODEL.get_file_name(file_path))
+            inputEdit = uis[0]
+            inputEdit.connect(inputEdit, SIGNAL("textChanged()"), self.renderInput)
+            inputEdit.css = self.MODEL.get_css()
+            '''
+            #self.MODEL.set_document_path(file_path)
+
+            self.VIEW.add_tab(self.MODEL.get_file_name(file_path))
+            self.VIEW.set_document(file_content)
             self.VIEW.change_active_tab(self.MODEL.ACTIVE_TAB)
-            #self.VIEW.set_document(unicode(file_content, 'utf-8'))
-
-
-
-
-
-
-
