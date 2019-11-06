@@ -90,6 +90,7 @@ class View(QMainWindow):
         tab_h_box = QHBoxLayout()
         tab_h_box.addWidget(input_edit)
         tab_h_box.addWidget(preview)
+        self.tabs.setCurrentWidget(tab)
         tab.setLayout(tab_h_box)
 
     def get_active_input(self):
@@ -116,4 +117,15 @@ class View(QMainWindow):
         else:
             return False
 
+    def select_file(self):
+        fname, _filter = QFileDialog.getOpenFileName(self, 'Select file', "", "*.md")
+        print( "Selected file: " + fname)
+        if fname:
+            return fname
+        else:
+            return False
+
+    def set_document(self, document):
+        inputEdit = self.get_active_input()
+        inputEdit.setText(document)
 

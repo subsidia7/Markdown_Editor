@@ -43,3 +43,21 @@ class Model:
         f = open(file_path, 'w')
         f.write(content)
         f.close()
+
+    # Попытка прочитать файл
+    def get_file_content_utf8(self, filename):
+        try:
+            # f = open(filename, 'r')
+            with open(filename, "r") as f:
+                return f.read()
+        except Exception as e:
+            print ("get_file_content_utf8")
+            print (str(e))
+            return False
+
+    # Открыт ли документ (есть ли в табах)
+    def is_document_present(self, file_path):
+        for ix in range(len(self.TABS)):
+            if self.TABS[ix]["path"] == file_path:
+                return ix
+        return -1
