@@ -102,3 +102,18 @@ class View(QMainWindow):
 
     def change_active_tab(self, index):
         self.tabs.setCurrentIndex(index)
+
+    def get_current_document_content(self):
+        input_edit = self.get_active_input()
+        content = input_edit.toPlainText()
+        return content
+
+    def save_file_picker(self):
+        fname, _ = QFileDialog.getSaveFileName(self, "File name", "", "*.md")
+        print("Selected file: " + fname)
+        if fname:
+            return fname
+        else:
+            return False
+
+
