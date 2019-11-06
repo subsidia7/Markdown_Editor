@@ -92,5 +92,4 @@ class Controller:
 
             self.VIEW.add_tab(self.MODEL.get_file_name())
             self.VIEW.change_active_tab(self.MODEL.ACTIVE_TAB)
-            #self.VIEW.tabs.currentChanged(self.MODEL.ACTIVE_TAB)
             self.VIEW.set_document(file_content)

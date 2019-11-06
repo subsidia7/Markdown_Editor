@@ -6,7 +6,7 @@ class Model:
     def __init__(self):
         self.ACTIVE_TAB = 0
         self.FILE_PATH = Constants.EMPTY_PATH
-        self.TABS = [{"path": ""}]
+        self.TABS = []
         self.RECENT_DOCUMENTS = None
 
     def get_file_name(self):
