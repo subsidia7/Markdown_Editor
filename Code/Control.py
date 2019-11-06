@@ -9,6 +9,7 @@ class Controller:
 
     def set_triggers(self):
         self.VIEW._new_action.triggered.connect(self.new_file)
+        self.VIEW._open_action.triggered.connect(self.open_file)
         self.VIEW._save_action.triggered.connect(self.save_file)
         self.VIEW._save_AS_action.triggered.connect(self.save_AS_file)
         self.VIEW._markdown_action.triggered.connect(self.markdown_show)
@@ -21,7 +22,9 @@ class Controller:
         self.VIEW.change_active_tab(self.MODEL.ACTIVE_TAB)
 
     def open_file(self):
-        pass
+        file_path = self.VIEW.select_file()
+        if file_path != False:
+            self.open_file_path(file_path)
 
     def save_file(self):
         if self.MODEL.FILE_PATH == Constants.EMPTY_PATH:
@@ -65,3 +68,29 @@ class Controller:
         html = self.VIEW.get_active_preview()
         markdown.show()
         html.show()
+
+    def open_file_path(self, file_path):
+        file_content = self.MODEL.get_file_content_utf8(file_path)
+
+        if file_content is False:
+            #self.VIEW.no_file_alert()
+            return False
+
+        doc_ix = self.MODEL.is_document_present(file_path)
+        if doc_ix != -1:
+            self.MODEL.ACTIVE_TAB = doc_ix
+            self.VIEW.change_active_tab(self.MODEL.ACTIVE_TAB)
+        else:
+            self.MODEL.append_document(file_path)
+            '''
+            uis = self.VIEW.add_tab(self.MODEL.get_file_name(file_path))
+            inputEdit = uis[0]
+            inputEdit.connect(inputEdit, SIGNAL("textChanged()"), self.renderInput)
+            inputEdit.css = self.MODEL.get_css()
+            '''
+            #self.MODEL.set_document_path(file_path)
+
+            self.VIEW.add_tab(self.MODEL.get_file_name())
+            self.VIEW.change_active_tab(self.MODEL.ACTIVE_TAB)
+            #self.VIEW.tabs.currentChanged(self.MODEL.ACTIVE_TAB)
+            self.VIEW.set_document(file_content)
