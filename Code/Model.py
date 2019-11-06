@@ -2,6 +2,7 @@ import Constants
 
 
 class Model:
+    # Active tabs
     def __init__(self):
         self.ACTIVE_TAB = 0
         self.FILE_PATH = Constants.EMPTY_PATH
