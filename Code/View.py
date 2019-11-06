@@ -92,6 +92,14 @@ class View(QMainWindow):
         tab_h_box.addWidget(preview)
         tab.setLayout(tab_h_box)
 
+    def select_file(self):
+        fname = QFileDialog.getOpenFileName(self, 'Select file', "", "*.md")
+        print( "Selected file: " + fname )
+        if fname:
+            return fname
+        else:
+            return False
+
     def get_active_input(self):
         return self.tabs.currentWidget().layout().itemAt(0).widget()# эта херота вернет input_edit которая для маркдауна
         # индекс 0 потому что мы его первым добавляли в лэйаут для таба
@@ -102,18 +110,3 @@ class View(QMainWindow):
 
     def change_active_tab(self, index):
         self.tabs.setCurrentIndex(index)
-
-    def get_current_document_content(self):
-        input_edit = self.get_active_input()
-        content = input_edit.toPlainText()
-        return content
-
-    def save_file_picker(self):
-        fname, _ = QFileDialog.getSaveFileName(self, "File name", "", "*.md")
-        print("Selected file: " + fname)
-        if fname:
-            return fname
-        else:
-            return False
-
-
