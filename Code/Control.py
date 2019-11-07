@@ -18,6 +18,8 @@ class Controller:
         self.VIEW._all_editors_action.triggered.connect(self.all_edits_show)
         self.VIEW._HTML_action.triggered.connect(self.html_show)
 
+        self.VIEW._add_image_action.triggered.connect(self.add_image)
+
         # ссылка на обработчик переключения вкладки
         self.VIEW.tabs.currentChanged.connect(self.tabChangedSlot)
         # ссылка на обработчик закрытия вкладки
@@ -61,7 +63,11 @@ class Controller:
         pass
 
     def add_image(self):
-        pass
+        if self.MODEL.TABS:
+            file_path = self.VIEW.select_file("*.png")
+            if file_path != False:
+                str = "![setNamePlease]" + "(" + file_path + ")"
+                self.VIEW.append_string(str)
 
     def add_reference(self):
         pass
