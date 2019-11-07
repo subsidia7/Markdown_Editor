@@ -122,13 +122,17 @@ class View(QMainWindow):
         else:
             return False
 
-    def select_file(self):
-        fname, _filter = QFileDialog.getOpenFileName(self, 'Select file', "", "*.md")
-        print("Selected file: " + fname)
+    def select_file(self, type_file = "*.md" ):
+        fname, _filter = QFileDialog.getOpenFileName(self, 'Select file', "", type_file)
+        print( "Selected file: " + fname)
         if fname:
             return fname
         else:
             return False
+
+    def append_string(self, str):
+        inputText = self.get_active_input()
+        inputText.append(str);
 
     def set_document(self, document):
         inputEdit = self.get_active_input()
