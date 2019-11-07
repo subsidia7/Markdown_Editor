@@ -58,6 +58,8 @@ class Controller:
             self.MODEL.save_document_path(file_path)
             self.MODEL.write_file_content(self.MODEL.FILE_PATH, content)
             self.MODEL.add_recent_document(file_path)
+            self.VIEW.tabs.setTabText(self.MODEL.ACTIVE_TAB, self.MODEL.get_file_name())
+
 
     def export_HTML(self):
         pass
