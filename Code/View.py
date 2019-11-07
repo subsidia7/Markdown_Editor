@@ -124,7 +124,7 @@ class View(QMainWindow):
 
     def select_file(self):
         fname, _filter = QFileDialog.getOpenFileName(self, 'Select file', "", "*.md")
-        print( "Selected file: " + fname)
+        print("Selected file: " + fname)
         if fname:
             return fname
         else:
