@@ -39,6 +39,9 @@ class Model:
         if len(self.RECENT_DOCUMENTS) > 11:
             self.RECENT_DOCUMENTS.pop()
 
+    def remove_tab(self, index):
+        self.TABS.pop(index)
+
     def write_file_content(self, file_path, content):
         f = open(file_path, 'w')
         f.write(content)

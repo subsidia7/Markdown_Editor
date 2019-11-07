@@ -1,6 +1,5 @@
 import Constants
 
-
 class Controller:
     def __init__(self, model, view):
         self.MODEL = model
@@ -8,13 +7,29 @@ class Controller:
         self.set_triggers()
 
     def set_triggers(self):
+        #file action
         self.VIEW._new_action.triggered.connect(self.new_file)
         self.VIEW._open_action.triggered.connect(self.open_file)
         self.VIEW._save_action.triggered.connect(self.save_file)
         self.VIEW._save_AS_action.triggered.connect(self.save_AS_file)
+
+        #web_action
         self.VIEW._markdown_action.triggered.connect(self.markdown_show)
         self.VIEW._all_editors_action.triggered.connect(self.all_edits_show)
         self.VIEW._HTML_action.triggered.connect(self.html_show)
+
+        # ссылка на обработчик переключения вкладки
+        self.VIEW.tabs.currentChanged.connect(self.tabChangedSlot)
+        # ссылка на обработчик закрытия вкладки
+        self.VIEW.tabs.tabCloseRequested.connect(self.tabCloseRequestedSlot)
+
+
+    def tabCloseRequestedSlot(self, argTabIndex):
+        self.MODEL.remove_tab(argTabIndex)
+        self.VIEW.remove_tab(argTabIndex)
+
+    def tabChangedSlot(self,argTabIndex):
+        self.MODEL.ACTIVE_TAB = argTabIndex
 
     def new_file(self):
         self.MODEL.append_document("")
@@ -82,13 +97,6 @@ class Controller:
             self.VIEW.change_active_tab(self.MODEL.ACTIVE_TAB)
         else:
             self.MODEL.append_document(file_path)
-            '''
-            uis = self.VIEW.add_tab(self.MODEL.get_file_name(file_path))
-            inputEdit = uis[0]
-            inputEdit.connect(inputEdit, SIGNAL("textChanged()"), self.renderInput)
-            inputEdit.css = self.MODEL.get_css()
-            '''
-            #self.MODEL.set_document_path(file_path)
 
             self.VIEW.add_tab(self.MODEL.get_file_name())
             self.VIEW.change_active_tab(self.MODEL.ACTIVE_TAB)

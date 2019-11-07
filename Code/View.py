@@ -95,6 +95,9 @@ class View(QMainWindow):
         #self.tabs.setCurrentWidget(tab)
         tab.setLayout(tab_h_box)
 
+    def remove_tab(self, index):
+        self.tabs.removeTab(index)
+
     def get_active_input(self):
         return self.tabs.currentWidget().layout().itemAt(0).widget()# эта херота вернет input_edit которая для маркдауна
         # индекс 0 потому что мы его первым добавляли в лэйаут для таба
