@@ -1,5 +1,6 @@
 import Model
 import Constants
+import MarkdownHighlighter
 from PyQt5.QtWidgets import QMainWindow, QWidget, QAction, QMenu, QFileDialog, QTextEdit, QLabel, QGridLayout, \
     QDesktopWidget, QHBoxLayout, QTabWidget, QLineEdit, QFormLayout, QPushButton
 from PyQt5.QtCore import QPoint
@@ -84,6 +85,7 @@ class View(QMainWindow):
     def add_tab(self, title):
         tab = QWidget()
         input_edit = TextEditor()
+        MarkdownHighlighter.MarkdownHighlighter(input_edit)
         preview = TextEditor()
         preview.setReadOnly(True)
         self.tabs.addTab(tab, title)
