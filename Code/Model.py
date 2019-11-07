@@ -6,7 +6,7 @@ class Model:
     def __init__(self):
         self.ACTIVE_TAB = 0
         self.FILE_PATH = Constants.EMPTY_PATH
-        self.TABS = [{"path": ""}]
+        self.TABS = [ ]
 
     def get_file_name(self, file_path):
         splitted = file_path.split("/")
@@ -37,6 +37,3 @@ class Model:
             if self.TABS[ix]["path"] == file_path:
                 return ix
         return -1
-
-    def set_document_path(self, file_path):
-        self.FILE_PATH = file_path
