@@ -88,7 +88,7 @@ class Controller:
     def add_image(self):
         file_path = self.VIEW.select_file("*.png")
         if file_path != False:
-            str = "![setNamePlease]" + "(" + file_path + ")"
+            str = "![setNamePlease]" + "(" + file_path + ")\n"
             self.VIEW.append_string(str)
 
     def add_reference(self):
