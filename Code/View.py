@@ -2,8 +2,8 @@ import Model
 import Constants
 import MarkdownHighlighter
 from PyQt5.QtWidgets import QMainWindow, QWidget, QAction, QMenu, QFileDialog, QTextEdit, QLabel, QGridLayout, \
-    QDesktopWidget, QHBoxLayout, QTabWidget, QLineEdit, QFormLayout, QPushButton
-from PyQt5.QtCore import QPoint
+    QDesktopWidget, QHBoxLayout, QTabWidget, QLineEdit, QFormLayout, QPushButton, QInputDialog
+from PyQt5.QtCore import QPoint, Qt
 
 
 class TextEditor(QTextEdit):
@@ -122,17 +122,23 @@ class View(QMainWindow):
             return False
 
     def select_file(self, type_file="*.md"):
-        fname, _filter = QFileDialog.getOpenFileName(self, 'Select file', "", type_file)
-        fname, _filter = QFileDialog.getOpenFileName(self, 'Select file', "", type_file)
+        fname, _ = QFileDialog.getOpenFileName(self, 'Select file', "", type_file)
         print("Selected file: " + fname)
         if fname:
             return fname
         else:
             return False
 
+    def get_input_dialog_text(self):
+        text, ok_pressed = QInputDialog.getText(self, "Добавление ссылки", "Введите URL для ссылки:", QLineEdit.Normal, "")
+        return str(text)
+
+    def show_input_dialog(self):
+        self.input_dialog.show()
+
     def append_string(self, str):
         inputText = self.get_active_input()
-        inputText.append(str)
+        inputText.insertPlainText(str)
 
     def set_document(self, document):
         inputEdit = self.get_active_input()

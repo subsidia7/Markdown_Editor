@@ -8,18 +8,19 @@ class Controller:
         self.set_triggers()
 
     def set_triggers(self):
-        #file action
+        #file actions
         self.VIEW._new_action.triggered.connect(self.new_file)
         self.VIEW._open_action.triggered.connect(self.open_file)
         self.VIEW._save_action.triggered.connect(self.save_file)
         self.VIEW._save_AS_action.triggered.connect(self.save_AS_file)
 
-        #web_action
+        #visual_actions
         self.VIEW._markdown_action.triggered.connect(self.markdown_show)
         self.VIEW._all_editors_action.triggered.connect(self.all_edits_show)
         self.VIEW._HTML_action.triggered.connect(self.html_show)
 
         self.VIEW._add_image_action.triggered.connect(self.add_image)
+        self.VIEW._add_reference_action.triggered.connect(self.add_reference)
 
         # ссылка на обработчик переключения вкладки
         self.VIEW.tabs.currentChanged.connect(self.tabChangedSlot)
@@ -48,6 +49,7 @@ class Controller:
         self.VIEW._HTML_action.setDisabled(value)
 
         self.VIEW._add_image_action.setDisabled(value)
+        self.VIEW._add_reference_action.setDisabled(value)
 
     def new_file(self):
         self.MODEL.append_document("")
@@ -55,7 +57,6 @@ class Controller:
         self.VIEW.change_active_tab(self.MODEL.ACTIVE_TAB)
         if self.MODEL.ACTIVE_TAB == 0:
             self.dangerous_actions_set_disabled(False)
-
 
     def open_file(self):
         file_path = self.VIEW.select_file()
@@ -81,19 +82,21 @@ class Controller:
             self.MODEL.add_recent_document(file_path)
             self.VIEW.tabs.setTabText(self.MODEL.ACTIVE_TAB, self.MODEL.get_file_name())
 
-
     def export_HTML(self):
         pass
 
     def add_image(self):
-        if self.MODEL.TABS:
-            file_path = self.VIEW.select_file("*.png")
-            if file_path != False:
-                str = "![setNamePlease]" + "(" + file_path + ")"
-                self.VIEW.append_string(str)
+        file_path = self.VIEW.select_file("*.png")
+        if file_path != False:
+            str = "![setNamePlease]" + "(" + file_path + ")"
+            self.VIEW.append_string(str)
 
     def add_reference(self):
-        pass
+        url = self.VIEW.get_input_dialog_text()
+        if url == "":
+            return
+        str = "[setNamePlease]" + "(" + url + ")\n"
+        self.VIEW.append_string(str)
 
     def markdown_show(self):
         markdown = self.VIEW.get_active_input()
@@ -115,18 +118,15 @@ class Controller:
 
     def open_file_path(self, file_path):
         file_content = self.MODEL.get_file_content_utf8(file_path)
-
         if file_content is False:
             #self.VIEW.no_file_alert()
             return False
-
         doc_ix = self.MODEL.is_document_present(file_path)
         if doc_ix != -1:
             self.MODEL.ACTIVE_TAB = doc_ix
             self.VIEW.change_active_tab(self.MODEL.ACTIVE_TAB)
         else:
             self.MODEL.append_document(file_path)
-
             self.VIEW.add_tab(self.MODEL.get_file_name())
             self.VIEW.change_active_tab(self.MODEL.ACTIVE_TAB)
             self.VIEW.set_document(file_content)
