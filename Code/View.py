@@ -92,7 +92,6 @@ class View(QMainWindow):
         tab_h_box = QHBoxLayout()
         tab_h_box.addWidget(input_edit)
         tab_h_box.addWidget(preview)
-        #self.tabs.setCurrentWidget(tab)
         tab.setLayout(tab_h_box)
 
     def remove_tab(self, index):

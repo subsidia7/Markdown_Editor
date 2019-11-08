@@ -1,5 +1,6 @@
 import Constants
 
+
 class Controller:
     def __init__(self, model, view):
         self.MODEL = model
@@ -24,24 +25,41 @@ class Controller:
         self.VIEW.tabs.currentChanged.connect(self.tabChangedSlot)
         # ссылка на обработчик закрытия вкладки
         self.VIEW.tabs.tabCloseRequested.connect(self.tabCloseRequestedSlot)
+        self.dangerous_actions_set_disabled(True)
 
 
     def tabCloseRequestedSlot(self, argTabIndex):
         self.MODEL.remove_tab(argTabIndex)
         self.VIEW.remove_tab(argTabIndex)
+        if len(self.MODEL.TABS) == 0:
+            self.dangerous_actions_set_disabled(True)
 
-    def tabChangedSlot(self,argTabIndex):
+    def tabChangedSlot(self, argTabIndex):
         self.MODEL.ACTIVE_TAB = argTabIndex
+
+    def dangerous_actions_set_disabled(self, value):
+        #file action
+        self.VIEW._save_action.setDisabled(value)
+        self.VIEW._save_AS_action.setDisabled(value)
+
+        #web_action
+        self.VIEW._markdown_action.setDisabled(value)
+        self.VIEW._all_editors_action.setDisabled(value)
+        self.VIEW._HTML_action.setDisabled(value)
+
+        self.VIEW._add_image_action.setDisabled(value)
 
     def new_file(self):
         self.MODEL.append_document("")
         self.VIEW.add_tab(Constants.EMPTY_TITLE)
         self.VIEW.change_active_tab(self.MODEL.ACTIVE_TAB)
+        self.dangerous_actions_set_disabled(False)
 
     def open_file(self):
         file_path = self.VIEW.select_file()
         if file_path != False:
             self.open_file_path(file_path)
+            self.dangerous_actions_set_disabled(False)
 
     def save_file(self):
         if self.MODEL.FILE_PATH == Constants.EMPTY_PATH:
