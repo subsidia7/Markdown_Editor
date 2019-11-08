@@ -53,13 +53,16 @@ class Controller:
         self.MODEL.append_document("")
         self.VIEW.add_tab(Constants.EMPTY_TITLE)
         self.VIEW.change_active_tab(self.MODEL.ACTIVE_TAB)
-        self.dangerous_actions_set_disabled(False)
+        if self.MODEL.ACTIVE_TAB == 0:
+            self.dangerous_actions_set_disabled(False)
+
 
     def open_file(self):
         file_path = self.VIEW.select_file()
         if file_path != False:
             self.open_file_path(file_path)
-            self.dangerous_actions_set_disabled(False)
+            if self.MODEL.ACTIVE_TAB == 0:
+                self.dangerous_actions_set_disabled(False)
 
     def save_file(self):
         if self.MODEL.FILE_PATH == Constants.EMPTY_PATH:
