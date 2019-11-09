@@ -148,5 +148,3 @@ class Controller:
         html = markdown.markdown(plainText)
         self.VIEW.set_html_editor(html)
         self.VIEW.set_preview(html)
-
-

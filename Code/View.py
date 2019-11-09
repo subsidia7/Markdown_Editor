@@ -87,11 +87,11 @@ class View(QMainWindow):
 
     def get_active_html_edit(self):
         return self.tabs.currentWidget().layout().itemAt(1).widget()# эта херота вернет html_edit которая для html
-        # индекс 0 потому что мы его первым добавляли в лэйаут для таба
+        # индекс 1 потому что мы его первым добавляли в лэйаут для таба
 
     def get_active_preview(self):
         return self.tabs.currentWidget().layout().itemAt(2).widget()# эта херота вернет preview которая для preview
-        # индекс 1 потому что мы его вторым добавляли в лэйаут для таба
+        # индекс 2 потому что мы его вторым добавляли в лэйаут для таба
 
     def change_active_tab(self, index):
         self.tabs.setCurrentIndex(index)
@@ -144,4 +144,3 @@ class View(QMainWindow):
     def set_preview(self, text):
         previewEdit = self.get_active_preview()
         previewEdit.setText(text)
-
