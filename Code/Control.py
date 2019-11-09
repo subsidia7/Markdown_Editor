@@ -6,19 +6,21 @@ class Controller:
         self.MODEL = model
         self.VIEW = view
         self.set_triggers()
+        self.dangerous_actions_set_disabled(True)
 
     def set_triggers(self):
-        #file actions
+        # file actions
         self.VIEW._new_action.triggered.connect(self.new_file)
         self.VIEW._open_action.triggered.connect(self.open_file)
         self.VIEW._save_action.triggered.connect(self.save_file)
         self.VIEW._save_AS_action.triggered.connect(self.save_AS_file)
 
-        #visual_actions
+        # visual_actions
         self.VIEW._markdown_action.triggered.connect(self.markdown_show)
         self.VIEW._all_editors_action.triggered.connect(self.all_edits_show)
-        self.VIEW._HTML_action.triggered.connect(self.html_show)
+        self.VIEW._html_action.triggered.connect(self.html_show)
 
+        # insert actions
         self.VIEW._add_image_action.triggered.connect(self.add_image)
         self.VIEW._add_reference_action.triggered.connect(self.add_reference)
 
@@ -26,7 +28,6 @@ class Controller:
         self.VIEW.tabs.currentChanged.connect(self.tabChangedSlot)
         # ссылка на обработчик закрытия вкладки
         self.VIEW.tabs.tabCloseRequested.connect(self.tabCloseRequestedSlot)
-        self.dangerous_actions_set_disabled(True)
 
 
     def tabCloseRequestedSlot(self, argTabIndex):
@@ -39,15 +40,16 @@ class Controller:
         self.MODEL.ACTIVE_TAB = argTabIndex
 
     def dangerous_actions_set_disabled(self, value):
-        #file action
+        # file action
         self.VIEW._save_action.setDisabled(value)
         self.VIEW._save_AS_action.setDisabled(value)
 
-        #web_action
+        # web_action
         self.VIEW._markdown_action.setDisabled(value)
         self.VIEW._all_editors_action.setDisabled(value)
-        self.VIEW._HTML_action.setDisabled(value)
+        self.VIEW._html_action.setDisabled(value)
 
+        # insert actions
         self.VIEW._add_image_action.setDisabled(value)
         self.VIEW._add_reference_action.setDisabled(value)
 
@@ -86,7 +88,7 @@ class Controller:
         pass
 
     def add_image(self):
-        file_path = self.VIEW.select_file("*.png")
+        file_path = self.VIEW.select_file("*.jpeg")
         if file_path != False:
             str = "![setNamePlease]" + "(" + file_path + ")\n"
             self.VIEW.append_string(str)

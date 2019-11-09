@@ -67,8 +67,8 @@ class View(QMainWindow):
         _view_menu = _menu_bar.addMenu("Просмотр")
         self._markdown_action = QAction("Только редактор markdown", self)
         self._all_editors_action = QAction("Показать markdown + html", self)
-        self._HTML_action = QAction("Показать только HTML", self)
-        _view_menu.addActions([self._markdown_action, self._all_editors_action, self._HTML_action])
+        self._html_action = QAction("Показать только html", self)
+        _view_menu.addActions([self._markdown_action, self._all_editors_action, self._html_action])
 
     def pos_center(self):
         q_r = self.frameGeometry()
