@@ -1,9 +1,8 @@
-import Model
 import Constants
 import MarkdownHighlighter
-from PyQt5.QtWidgets import QMainWindow, QWidget, QAction, QMenu, QFileDialog, QTextEdit, QLabel, QGridLayout, \
-    QDesktopWidget, QHBoxLayout, QTabWidget, QLineEdit, QFormLayout, QPushButton, QInputDialog
-from PyQt5.QtCore import QPoint, Qt
+import HtmlHighlighter
+from PyQt5.QtWidgets import QMainWindow, QWidget, QAction, QMenu, QFileDialog, QTextEdit, QDesktopWidget, QHBoxLayout, QTabWidget, QLineEdit, \
+    QInputDialog
 
 
 class TextEditor(QTextEdit):
@@ -68,6 +67,7 @@ class View(QMainWindow):
         input_edit = TextEditor()
         MarkdownHighlighter.MarkdownHighlighter(input_edit)
         html_edit = TextEditor()
+        HtmlHighlighter.HtmlHighlighter(html_edit)
         html_edit.setReadOnly(True)
         preview = TextEditor()
         preview.setReadOnly(True)
