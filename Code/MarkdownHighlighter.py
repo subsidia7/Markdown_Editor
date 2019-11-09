@@ -1,121 +1,102 @@
 from PyQt5.QtGui import *
 from PyQt5.QtCore import QRegExp
+import TextHighlighter
 
-class MarkdownHighlighter(QSyntaxHighlighter):
+
+class MarkdownHighlighter(TextHighlighter.Highlighter):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.h1_color               = '#6C78C4'
-        self.h2_color               = '#6C78C4'
-        self.h3_color               = '#6C78C4'
-        self.h4_color               = '#268BD2'
-        self.h5_color               = '#268BD2'
-        self.h6_color               = '#268BD2'
-        self.bold_color             = '#DC322F'
-        self.italic_color           = '#CB4B16'
-        self.link_color             = '#4E27A6'
-        self.code_color             = '#008C3F'
-        self.anchor_color           = '#BF6211'
-        self.block_quotes_color     = '#93A1A1'
-        self.html_entity_color      = '#8871C4'
-
-        self.highlightingRules = []
-        keyword_format = QTextCharFormat()
-        keyword_format.setForeground(QColor('#8871C4'))
-        self.highlightingRules.append((QRegExp("."), keyword_format))
+        h1_color               = '#6C78C4'
+        h2_color               = '#6C78C4'
+        h3_color               = '#6C78C4'
+        h4_color               = '#268BD2'
+        h5_color               = '#268BD2'
+        h6_color               = '#268BD2'
+        bold_color             = '#DC322F'
+        italic_color           = '#CB4B16'
+        link_color             = '#4E27A6'
+        code_color             = '#008C3F'
+        anchor_color           = '#BF6211'
+        block_quotes_color     = '#93A1A1'
 
         # italic
-        italicFormat = QTextCharFormat()
-        italicFormat.setForeground(QColor(self.italic_color))
-        italicFormat.setFontItalic(True)
-        self.highlightingRules.append((QRegExp("\*.*\*"), italicFormat))
+        italic_format = QTextCharFormat()
+        italic_format.setForeground(QColor(italic_color))
+        italic_format.setFontItalic(True)
+        self._add_rule((QRegExp("\*.*\*"), italic_format))
 
         # bold
-        boldFormat = QTextCharFormat()
-        boldFormat.setForeground(QColor(self.italic_color))
-        boldFormat.setFontWeight(99)
-        self.highlightingRules.append((QRegExp("\*\*.*\*\*"), boldFormat))
+        bold_format = QTextCharFormat()
+        bold_format.setForeground(QColor(bold_color))
+        bold_format.setFontWeight(99)
+        self._add_rule((QRegExp("\*\*.*\*\*"), bold_format))
 
         # h1
-        h1Format = QTextCharFormat()
-        h1Format.setForeground(QColor(self.h1_color))
-        h1Format.setFontWeight(99)
-        h1Format.setFontPointSize(18)
-        self.highlightingRules.append((QRegExp("^#.*$"), h1Format))
+        h1_format = QTextCharFormat()
+        h1_format.setForeground(QColor(h1_color))
+        h1_format.setFontWeight(99)
+        h1_format.setFontPointSize(18)
+        self._add_rule((QRegExp("^#.*$"), h1_format))
 
         # h2
-        h2Format = QTextCharFormat()
-        h2Format.setForeground(QColor(self.h2_color))
-        h2Format.setFontWeight(99)
-        h2Format.setFontPointSize(16)
-        self.highlightingRules.append((QRegExp("^##.*$"), h2Format))
+        h2_format = QTextCharFormat()
+        h2_format.setForeground(QColor(h2_color))
+        h2_format.setFontWeight(99)
+        h2_format.setFontPointSize(16)
+        self._add_rule((QRegExp("^##.*$"), h2_format))
 
         # h3
-        h3Format = QTextCharFormat()
-        h3Format.setForeground(QColor(self.h3_color))
-        h3Format.setFontWeight(99)
-        h3Format.setFontPointSize(14)
-        self.highlightingRules.append((QRegExp("^###.*$"), h3Format))
+        h3_format = QTextCharFormat()
+        h3_format.setForeground(QColor(h3_color))
+        h3_format.setFontWeight(99)
+        h3_format.setFontPointSize(14)
+        self._add_rule((QRegExp("^###.*$"), h3_format))
 
         # h4
-        h4Format = QTextCharFormat()
-        h4Format.setForeground(QColor(self.h4_color))
-        h4Format.setFontWeight(99)
-        h4Format.setFontPointSize(12)
-        self.highlightingRules.append((QRegExp("^####.*$"), h4Format))
+        h4_format = QTextCharFormat()
+        h4_format.setForeground(QColor(h4_color))
+        h4_format.setFontWeight(99)
+        h4_format.setFontPointSize(12)
+        self._add_rule((QRegExp("^####.*$"), h4_format))
 
         # h5
-        h5Format = QTextCharFormat()
-        h5Format.setForeground(QColor(self.h5_color))
-        h5Format.setFontWeight(99)
-        h5Format.setFontPointSize(10)
-        self.highlightingRules.append((QRegExp("^#####.*$"), h5Format))
+        h5_format = QTextCharFormat()
+        h5_format.setForeground(QColor(h5_color))
+        h5_format.setFontWeight(99)
+        h5_format.setFontPointSize(10)
+        self._add_rule((QRegExp("^#####.*$"), h5_format))
 
         # h6
-        h6Format = QTextCharFormat()
-        h6Format.setForeground(QColor(self.h6_color))
-        h6Format.setFontWeight(99)
-        h6Format.setFontPointSize(10)
-        self.highlightingRules.append((QRegExp("^######.*$"), h6Format))
+        h6_format = QTextCharFormat()
+        h6_format.setForeground(QColor(h6_color))
+        h6_format.setFontWeight(99)
+        h6_format.setFontPointSize(10)
+        self._add_rule((QRegExp("^######.*$"), h6_format))
 
         # link
-        linkFormat = QTextCharFormat()
-        linkFormat.setForeground(QColor(self.link_color))
-        self.highlightingRules.append((QRegExp("<.*>"), linkFormat))
+        link_format = QTextCharFormat()
+        link_format.setForeground(QColor(link_color))
+        self._add_rule((QRegExp("<.*>"), link_format))
 
         # anchor
-        anchorFormat = QTextCharFormat()
-        anchorFormat.setForeground(QColor(self.anchor_color))
-        self.highlightingRules.append((QRegExp("\[.*\]\(.*\)"), anchorFormat))
+        anchor_format = QTextCharFormat()
+        anchor_format.setForeground(QColor(anchor_color))
+        self._add_rule((QRegExp("\[.*\]\(.*\)"), anchor_format))
 
         #code
-        codeFormat = QTextCharFormat()
-        codeFormat.setForeground(QColor(self.code_color))
-        codeFormat.setFontPointSize(10)
-        codeFormat.setFontWeight(75)
-        self.highlightingRules.append((QRegExp("`.*`"), codeFormat))
+        code_format = QTextCharFormat()
+        code_format.setForeground(QColor(code_color))
+        code_format.setFontPointSize(10)
+        code_format.setFontWeight(75)
+        self._add_rule((QRegExp("`.*`"), code_format))
 
-        codeFormat2 = QTextCharFormat()
-        codeFormat2.setForeground(QColor(self.code_color))
-        codeFormat2.setFontPointSize(10)
-        codeFormat2.setFontWeight(75)
-        self.highlightingRules.append((QRegExp("\t.*$"), codeFormat2))
+        code_format2 = QTextCharFormat()
+        code_format2.setForeground(QColor(code_color))
+        code_format2.setFontPointSize(10)
+        code_format2.setFontWeight(75)
+        self._add_rule((QRegExp("\t.*$"), code_format2))
 
         # block quotes
-        blockQuotesFormat = QTextCharFormat()
-        blockQuotesFormat.setForeground(QColor(self.block_quotes_color))
-        self.highlightingRules.append((QRegExp("^> "), blockQuotesFormat))
-
-        # html entity
-        # htmlEntityFormat = QTextCharFormat()
-        # htmlEntityFormat.setForeground(QColor(self.html_entity_color))
-        # self.highlightingRules.append((QRegExp("&.*;"), htmlEntityFormat))
-
-    def highlightBlock(self, text):
-        for expression, format in self.highlightingRules:
-            index = expression.indexIn(text)
-            while index >= 0:
-                length = expression.matchedLength()
-                self.setFormat(index, length, format)
-                index = expression.indexIn(text, index + length)
-
-        self.setCurrentBlockState(0)
+        block_quotes_format = QTextCharFormat()
+        block_quotes_format.setForeground(QColor(block_quotes_color))
+        self._add_rule((QRegExp("^> "), block_quotes_format))
