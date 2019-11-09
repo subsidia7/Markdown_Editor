@@ -112,8 +112,7 @@ class MarkdownHighlighter(QSyntaxHighlighter):
         self.highlightingRules.append((QRegExp("&.*;"), htmlEntityFormat))
 
     def highlightBlock(self, text):
-        for pattern, format in self.highlightingRules:
-            expression = QRegExp(pattern)
+        for expression, format in self.highlightingRules:
             index = expression.indexIn(text)
             while index >= 0:
                 length = expression.matchedLength()

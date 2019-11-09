@@ -1,5 +1,5 @@
 import Constants
-
+import markdown
 
 class Controller:
     def __init__(self, model, view):
@@ -26,6 +26,7 @@ class Controller:
         self.VIEW.tabs.currentChanged.connect(self.tabChangedSlot)
         # ссылка на обработчик закрытия вкладки
         self.VIEW.tabs.tabCloseRequested.connect(self.tabCloseRequestedSlot)
+
         self.dangerous_actions_set_disabled(True)
 
 
@@ -57,6 +58,9 @@ class Controller:
         self.VIEW.change_active_tab(self.MODEL.ACTIVE_TAB)
         if self.MODEL.ACTIVE_TAB == 0:
             self.dangerous_actions_set_disabled(False)
+
+        inputEdit = self.VIEW.get_active_input()
+        inputEdit.textChanged.connect(self.change_preview)
 
     def open_file(self):
         file_path = self.VIEW.select_file()
@@ -130,3 +134,10 @@ class Controller:
             self.VIEW.add_tab(self.MODEL.get_file_name())
             self.VIEW.change_active_tab(self.MODEL.ACTIVE_TAB)
             self.VIEW.set_document(file_content)
+
+    def change_preview(self):
+        plainText = self.VIEW.get_active_input().toPlainText()
+        html = markdown.markdown(plainText)
+        self.VIEW.set_preview(html)
+
+

@@ -144,3 +144,7 @@ class View(QMainWindow):
         inputEdit = self.get_active_input()
         inputEdit.setText(document)
 
+    def set_preview(self, text):
+        previewEdit = self.get_active_preview()
+        previewEdit.setText(text)
+
