@@ -19,9 +19,9 @@ class MarkdownHighlighter(QSyntaxHighlighter):
         self.html_entity_color      = '#8871C4'
 
         self.highlightingRules = []
-        # keyword_format = QTextCharFormat()
-        # keyword_format.setForeground(QColor("black"))
-        # self.highlightingRules.append((QRegExp("."), keyword_format))
+        keyword_format = QTextCharFormat()
+        keyword_format.setForeground(QColor('#8871C4'))
+        self.highlightingRules.append((QRegExp("."), keyword_format))
 
         # italic
         italicFormat = QTextCharFormat()
@@ -106,9 +106,9 @@ class MarkdownHighlighter(QSyntaxHighlighter):
         self.highlightingRules.append((QRegExp("^> "), blockQuotesFormat))
 
         # html entity
-        htmlEntityFormat = QTextCharFormat()
-        htmlEntityFormat.setForeground(QColor(self.html_entity_color))
-        self.highlightingRules.append((QRegExp("&.*;"), htmlEntityFormat))
+        # htmlEntityFormat = QTextCharFormat()
+        # htmlEntityFormat.setForeground(QColor(self.html_entity_color))
+        # self.highlightingRules.append((QRegExp("&.*;"), htmlEntityFormat))
 
     def highlightBlock(self, text):
         for expression, format in self.highlightingRules:

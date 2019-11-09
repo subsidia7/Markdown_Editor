@@ -4,6 +4,17 @@ PROGRAM_TITLE = "Markdown Editor"
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 480
 
+BEFORE_BODY_CONTENT = "<!DOCTYPE html\n"\
+                        "<html lang=\"en\">\n"\
+                        "<head>\n"\
+	                    "<meta charset=\"UTF-8\">\n"\
+	                    "<title>Document</title>\n"\
+                        "</head>\n"\
+                        "<body>\n"
+
+AFTER_BODY_CONTENT = "\n</body>"\
+                       "</html>"
+
 # пока не надо
 MARKDOWN_STYLE = "text-transform: uppercase;"\
                  "background: #313A3D;"\
