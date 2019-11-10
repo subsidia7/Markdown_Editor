@@ -109,7 +109,7 @@ class Controller:
             self.MODEL.write_file_content(file_path, content)
 
     def add_image(self):
-        file_path = self.VIEW.select_file("*.jpg")
+        file_path = self.VIEW.select_file("*.jpg *.png")
         if file_path != False:
             str = "![setNamePlease]" + "(" + file_path + ")\n"
             self.VIEW.append_string(str)
