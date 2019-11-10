@@ -15,6 +15,7 @@ class Controller:
         self.VIEW._save_action.triggered.connect(self.save_file)
         self.VIEW._save_AS_action.triggered.connect(self.save_AS_file)
         self.VIEW._export_html.triggered.connect(self.export_HTML)
+        self.VIEW.mapper.mapped['QString'].connect(self.open_file_path)
         # visual_actions
         self.VIEW._markdown_action.triggered.connect(self.markdown_show_hide)
         self.VIEW._html_editor_action.triggered.connect(self.html_edit_show_hide)
@@ -29,6 +30,8 @@ class Controller:
         # ссылка на обработчик закрытия вкладки
         self.VIEW.tabs.tabCloseRequested.connect(self.tabCloseRequestedSlot)
         self.dangerous_actions_set_disabled(True)
+
+        self.refresh_recent_documents()
 
     def tabCloseRequestedSlot(self, argTabIndex):
         self.MODEL.remove_tab(argTabIndex)
@@ -54,6 +57,14 @@ class Controller:
         self.VIEW._add_image_action.setDisabled(value)
         self.VIEW._add_reference_action.setDisabled(value)
 
+    def refresh_recent_documents(self):
+        if len(self.MODEL.RECENT_DOCUMENTS) > 0:
+            self.VIEW._recent_menu.setDisabled(False)
+            self.VIEW._recent_menu.clear()
+            for item in self.MODEL.RECENT_DOCUMENTS:
+                action = self.VIEW.add_recent_document(str(item))
+                action.triggered.connect(self.VIEW.mapper.map)
+
     def new_file(self):
         self.MODEL.append_document("")
         self.VIEW.add_tab(Constants.EMPTY_TITLE)
@@ -68,9 +79,7 @@ class Controller:
         file_path = self.VIEW.select_file()
         if file_path != False:
             self.open_file_path(file_path)
-            inputEdit = self.VIEW.get_active_input()
-            inputEdit.textChanged.connect(self.change_html_edit)
-            inputEdit.textChanged.connect(self.change_preview)
+
             if self.MODEL.ACTIVE_TAB == 0:
                 self.dangerous_actions_set_disabled(False)
 
@@ -89,6 +98,7 @@ class Controller:
             self.MODEL.save_document_path(file_path)
             self.MODEL.write_file_content(self.MODEL.FILE_PATH, content)
             self.MODEL.add_recent_document(file_path)
+            self.refresh_recent_documents()
             self.VIEW.tabs.setTabText(self.MODEL.ACTIVE_TAB, self.MODEL.get_file_name())
 
     def export_HTML(self):
@@ -130,7 +140,7 @@ class Controller:
             widget.hide()
 
     def open_file_path(self, file_path):
-        file_content = self.MODEL.get_file_content_utf8(file_path)
+        file_content = self.MODEL.get_file_content(file_path)
         if file_content is False:
             return False
         doc_ix = self.MODEL.is_document_present(file_path)
@@ -139,14 +149,17 @@ class Controller:
             self.VIEW.change_active_tab(self.MODEL.ACTIVE_TAB)
         else:
             self.MODEL.append_document(file_path)
+            self.MODEL.add_recent_document(file_path)
             self.VIEW.add_tab(self.MODEL.get_file_name())
             self.VIEW.change_active_tab(self.MODEL.ACTIVE_TAB)
+            inputEdit = self.VIEW.get_active_input()
+            inputEdit.textChanged.connect(self.change_html_preview)
+            inputEdit.textChanged.connect(self.change_html_preview)
             self.VIEW.set_document(file_content)
+        self.refresh_recent_documents()
 
     def change_html_preview(self):
         plainText = self.VIEW.get_active_input().toPlainText()
         html = markdown.markdown(plainText)
         self.VIEW.set_html_editor(html)
         self.VIEW.set_preview(html)
-
-

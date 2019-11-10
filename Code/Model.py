@@ -1,5 +1,5 @@
 import Constants
-
+import json
 
 class Model:
     # Active tabs
@@ -7,7 +7,16 @@ class Model:
         self.ACTIVE_TAB = 0
         self.FILE_PATH = Constants.EMPTY_PATH
         self.TABS = []
-        self.RECENT_DOCUMENTS = None
+        self.RECENT_DOCUMENTS = self.get_recent_documents()
+
+    def get_recent_documents(self):
+        #result = self.get_file_content(Constants.CONFIG_FILE)
+        db = open(Constants.CONFIG_FILE)
+        data = json.load(db)
+        if "recent_documents" in data and type(data) is not None:
+           return data["recent_documents"]
+        else:
+            return[]
 
     def get_file_name(self):
         splitted = self.FILE_PATH.split('/')
@@ -25,8 +34,8 @@ class Model:
         self.TABS[self.ACTIVE_TAB]["path"] = file_path
 
     def add_recent_document(self, path):
-        if self.RECENT_DOCUMENTS is None:
-            self.RECENT_DOCUMENTS = []
+        #if self.RECENT_DOCUMENTS is None:
+        #   self.RECENT_DOCUMENTS = []
         l = len(self.RECENT_DOCUMENTS)
         t = self.RECENT_DOCUMENTS[:l]
         for ix in range(len(t)):
@@ -38,6 +47,12 @@ class Model:
         self.RECENT_DOCUMENTS.extend(t)
         if len(self.RECENT_DOCUMENTS) > 11:
             self.RECENT_DOCUMENTS.pop()
+
+        result = self.get_file_content(Constants.CONFIG_FILE)
+        data = json.loads(result)
+        data['recent_documents'] = self.RECENT_DOCUMENTS
+
+        self.write_file_content(Constants.CONFIG_FILE, json.dumps(data))
 
     def remove_tab(self, index):
         self.TABS.pop(index)
@@ -53,7 +68,7 @@ class Model:
             return False
 
     # Попытка прочитать файл
-    def get_file_content_utf8(self, filename):
+    def get_file_content(self, filename):
         try:
             # f = open(filename, 'r')
             with open(filename, "r") as f:
