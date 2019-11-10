@@ -3,6 +3,7 @@ EMPTY_TITLE = "Untitled"
 PROGRAM_TITLE = "Markdown Editor"
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 480
+CONFIG_FILE = "user.json"
 
 BEFORE_BODY_CONTENT = "<!DOCTYPE html\n"\
                         "<html lang=\"en\">\n"\

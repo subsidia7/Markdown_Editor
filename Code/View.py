@@ -1,9 +1,9 @@
 import Constants
 import MarkdownHighlighter
 import HtmlHighlighter
-from PyQt5.QtWidgets import QMainWindow, QWidget, QAction, QMenu, QFileDialog, QTextEdit, QDesktopWidget, QHBoxLayout, QTabWidget, QLineEdit, \
+from PyQt5.QtWidgets import QMainWindow, QWidget, QAction, QMenu, QFileDialog, QTextEdit, QDesktopWidget, QHBoxLayout, QTabWidget, QLineEdit, QLabel,\
     QInputDialog
-
+from PyQt5.QtCore import QSignalMapper
 
 class TextEditor(QTextEdit):
     def __init__(self):
@@ -34,8 +34,10 @@ class View(QMainWindow):
         self._save_action = QAction("Сохранить", self)
         self._save_AS_action = QAction("Сохранить как", self)
         self._export_html = QAction("Экспорт в HTML", self)
+        self._recent_menu = QMenu("Недавние файлы", self)
         _file_menu.addActions([self._new_action, self._open_action, self._save_action, self._save_AS_action,
                                self._export_html])
+        _file_menu.addMenu(self._recent_menu)
         # creating editing menu
         _editing_menu = _menu_bar.addMenu("Изменить")
         _inner_menu = QMenu("Добавить", self)
@@ -49,6 +51,14 @@ class View(QMainWindow):
         self._html_editor_action = QAction("Показать/Скрыть html markup", self)
         self._preview_action = QAction("Показать/Скрыть html превью", self)
         _view_menu.addActions([self._markdown_action, self._html_editor_action, self._preview_action])
+
+        self.mapper = QSignalMapper(self)
+
+    def add_recent_document(self, file_path):
+        recentFileAction = QAction(str(file_path), self)
+        self.mapper.setMapping(recentFileAction, str(file_path))
+        self._recent_menu.addAction(recentFileAction)
+        return recentFileAction
 
     def pos_center(self):
         q_r = self.frameGeometry()
