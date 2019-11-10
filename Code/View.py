@@ -1,8 +1,8 @@
 import Constants
 import MarkdownHighlighter
 import HtmlHighlighter
-from PyQt5.QtWidgets import QMainWindow, QWidget, QAction, QMenu, QFileDialog, QTextEdit, QDesktopWidget, QHBoxLayout, QTabWidget, QLineEdit, \
-    QInputDialog
+from PyQt5.QtWidgets import QMainWindow, QWidget, QAction, QMenu, QFileDialog, QTextEdit, QDesktopWidget, QHBoxLayout, \
+    QTabWidget, QLineEdit, QInputDialog
 
 
 class TextEditor(QTextEdit):

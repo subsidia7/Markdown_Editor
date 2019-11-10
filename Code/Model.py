@@ -43,9 +43,14 @@ class Model:
         self.TABS.pop(index)
 
     def write_file_content(self, file_path, content):
-        f = open(file_path, 'w')
-        f.write(content)
-        f.close()
+        try:
+            f = open(file_path, 'w')
+            f.write(content)
+            f.close()
+        except Exception as e:
+            print("write_file_content")
+            print(str(e))
+            return False
 
     # Попытка прочитать файл
     def get_file_content_utf8(self, filename):
@@ -54,8 +59,8 @@ class Model:
             with open(filename, "r") as f:
                 return f.read()
         except Exception as e:
-            print ("get_file_content_utf8")
-            print (str(e))
+            print("get_file_content_utf8")
+            print(str(e))
             return False
 
     # Открыт ли документ (есть ли в табах)
