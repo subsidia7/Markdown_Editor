@@ -1,5 +1,4 @@
 from PyQt5.QtGui import QSyntaxHighlighter
-from PyQt5.QtCore import QRegExp
 
 
 class Highlighter(QSyntaxHighlighter):

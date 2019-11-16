@@ -126,10 +126,10 @@ class View(QMainWindow):
             return False
 
     def select_file(self, type_file="*.md"):
-        fname, _ = QFileDialog.getOpenFileName(self, 'Select file', "", type_file)
+        fname, type = QFileDialog.getOpenFileName(self, 'Select file', "", type_file)
         print("Selected file: " + fname)
         if fname:
-            return fname
+            return (fname, type)
         else:
             return False
 

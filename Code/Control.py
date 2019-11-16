@@ -1,5 +1,7 @@
 import Constants
 import markdown
+import string
+
 
 class Controller:
     def __init__(self, model, view):
@@ -74,12 +76,22 @@ class Controller:
         # setting trigger to Text Editor
         inputEdit = self.VIEW.get_active_input()
         inputEdit.textChanged.connect(self.change_html_preview)
+        self.set_init_html()
+
+    def set_init_html(self):
+        name = self.MODEL.get_file_name()
+        name = name[:name.find('.')]
+        init_tags = Constants.HTML_CONTENT
+        input = self.VIEW.get_active_input()
+        content = self.VIEW.get_current_document_content()
+        init_tags = init_tags.format(name, content)
+        self.VIEW.set_html_editor(init_tags)
 
     def open_file(self):
-        file_path = self.VIEW.select_file()
+        file_path, type = self.VIEW.select_file()
         if file_path != False:
             self.open_file_path(file_path)
-
+            self.set_init_html()
             if self.MODEL.ACTIVE_TAB == 0:
                 self.dangerous_actions_set_disabled(False)
 
@@ -105,7 +117,7 @@ class Controller:
         content = self.VIEW.get_current_document_html()
         file_path = self.VIEW.save_file_picker("*.html")
         if file_path != False:
-            content = Constants.BEFORE_BODY_CONTENT + content + Constants.AFTER_BODY_CONTENT
+            #content = Constants.BEFORE_TITLE_CONTENT + self.MODEL.get_file_name() + Constants.AFTER_BODY_CONTENT + content +
             self.MODEL.write_file_content(file_path, content)
 
     def add_image(self):
