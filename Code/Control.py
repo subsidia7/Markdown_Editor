@@ -80,20 +80,13 @@ class Controller:
         # setting trigger to Text Editor
         inputEdit = self.VIEW.get_active_input()
         inputEdit.textChanged.connect(self.change_html_preview)
-        self.set_init_html()
-
-    def set_init_html(self):
-        name = self.MODEL.get_file_title()
-        init_tags = Constants.HTML_CONTENT
-        content = self.VIEW.get_current_document_content()
-        init_tags = init_tags.format(name, content)
-        self.VIEW.set_html_editor(init_tags)
+        self.change_html_preview()
 
     def open_file(self):
         file_path, type = self.VIEW.select_file()
         if file_path != False:
             self.open_file_path(file_path)
-            self.set_init_html()
+            self.change_html_preview()
             if self.MODEL.ACTIVE_TAB == 0:
                 self.dangerous_actions_set_disabled(False)
 
@@ -181,7 +174,10 @@ class Controller:
         self.refresh_recent_documents()
 
     def change_html_preview(self):
-        plainText = self.VIEW.get_active_input().toPlainText()
-        html = markdown.markdown(plainText)
-        self.VIEW.set_html_editor(html)
-        self.VIEW.set_preview(html)
+        name = self.MODEL.get_file_title()
+        init_tags = Constants.HTML_CONTENT
+        content = self.VIEW.get_active_input().toPlainText()
+        content = markdown.markdown(content)
+        init_tags = init_tags.format(name, content)
+        self.VIEW.set_html_editor(init_tags)
+        self.VIEW.set_preview(init_tags)
