@@ -4,6 +4,7 @@ import HtmlHighlighter
 from PyQt5.QtWidgets import QMainWindow, QWidget, QAction, QMenu, QFileDialog, QTextEdit, QDesktopWidget, QHBoxLayout,\
     QTabWidget, QLineEdit, QInputDialog
 from PyQt5.QtCore import QSignalMapper
+from PyQt5.QtGui import QIcon
 
 
 class TextEditor(QTextEdit):
@@ -30,9 +31,9 @@ class View(QMainWindow):
         _menu_bar = self.menuBar()
         # creating file menu
         _file_menu = _menu_bar.addMenu("Файл")
-        self._new_action = QAction("Создать файл", self)
-        self._open_action = QAction("Открыть файл", self)
-        self._save_action = QAction("Сохранить", self)
+        self._new_action = QAction(QIcon(r"Icons/new.ico"), "Создать файл", self)
+        self._open_action = QAction(QIcon(r"Icons/folder.ico"), "Открыть файл", self)
+        self._save_action = QAction(QIcon(r"Icons/save.ico"), "Сохранить", self)
         self._save_AS_action = QAction("Сохранить как", self)
         self._export_html = QAction("Экспорт в HTML", self)
         self._recent_menu = QMenu("Недавние файлы", self)
@@ -42,8 +43,8 @@ class View(QMainWindow):
         # creating editing menu
         _editing_menu = _menu_bar.addMenu("Изменить")
         _inner_menu = QMenu("Добавить", self)
-        self._add_image_action = QAction("Изображение", self)
-        self._add_reference_action = QAction("Ссылку", self)
+        self._add_image_action = QAction(QIcon(r"Icons/image.ico"), "Изображение", self)
+        self._add_reference_action = QAction(QIcon(r"Icons/link.ico"), "Ссылку", self)
         _inner_menu.addActions([self._add_image_action, self._add_reference_action])
         _editing_menu.addMenu(_inner_menu)
         # creating view menu
@@ -52,6 +53,15 @@ class View(QMainWindow):
         self._html_editor_action = QAction("Показать/Скрыть html markup", self)
         self._preview_action = QAction("Показать/Скрыть html превью", self)
         _view_menu.addActions([self._markdown_action, self._html_editor_action, self._preview_action])
+
+        #Toolbar
+        self.file_toolbar = self.addToolBar("files")
+        self.file_toolbar.addActions([self._new_action, self._open_action, self._save_action])
+
+        self.edit_toolbar = self.addToolBar("edit")
+        self.edit_toolbar.addActions([self._add_image_action, self._add_reference_action])
+
+
 
         self.mapper = QSignalMapper(self)
 
@@ -93,15 +103,18 @@ class View(QMainWindow):
         self.tabs.removeTab(index)
 
     def get_active_input(self):
-        return self.tabs.currentWidget().layout().itemAt(0).widget()# эта херота вернет input_edit которая для маркдауна
+        return self.tabs.currentWidget().layout().itemAt(0).widget()
+        # эта штука вернет input_edit которая для маркдауна
         # индекс 0 потому что мы его первым добавляли в лэйаут для таба
 
     def get_active_html_edit(self):
-        return self.tabs.currentWidget().layout().itemAt(1).widget()# эта херота вернет html_edit которая для html
+        return self.tabs.currentWidget().layout().itemAt(1).widget()
+        # эта штука вернет html_edit которая для html
         # индекс 1 потому что мы его первым добавляли в лэйаут для таба
 
     def get_active_preview(self):
-        return self.tabs.currentWidget().layout().itemAt(2).widget()# эта херота вернет preview которая для preview
+        return self.tabs.currentWidget().layout().itemAt(2).widget()
+        # эта штука вернет preview которая для preview
         # индекс 2 потому что мы его вторым добавляли в лэйаут для таба
 
     def change_active_tab(self, index):
@@ -126,10 +139,10 @@ class View(QMainWindow):
             return False
 
     def select_file(self, type_file="*.md"):
-        fname, type = QFileDialog.getOpenFileName(self, 'Select file', "", type_file)
+        fname, _ = QFileDialog.getOpenFileName(self, 'Select file', "", type_file)
         print("Selected file: " + fname)
         if fname:
-            return (fname, type)
+            return fname
         else:
             return False
 
