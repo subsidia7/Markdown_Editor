@@ -29,6 +29,16 @@ class View(QMainWindow):
     def init_menu(self):
         # menu_bar
         _menu_bar = self.menuBar()
+        self.init_file_menu(_menu_bar)
+        self.init_edditing_menu(_menu_bar)
+        self.init_view_menu(_menu_bar)
+        self.init_file_toolbar()
+        self.init_adding_toolbar()
+        self.init_formattin_toolbar()
+        # mapper for recent files
+        self.mapper = QSignalMapper(self)
+
+    def init_file_menu(self, _menu_bar):
         # creating file menu
         _file_menu = _menu_bar.addMenu("Файл")
         self._new_action = QAction(QIcon(r"Icons/new.ico"), "Создать файл", self)
@@ -40,13 +50,24 @@ class View(QMainWindow):
         _file_menu.addActions([self._new_action, self._open_action, self._save_action, self._save_AS_action,
                                self._export_html])
         _file_menu.addMenu(self._recent_menu)
+
+    def init_edditing_menu(self, _menu_bar):
         # creating editing menu
         _editing_menu = _menu_bar.addMenu("Изменить")
-        _inner_menu = QMenu("Добавить", self)
+                # submenu for adding
+        _adding_menu = QMenu("Добавить", self)
         self._add_image_action = QAction(QIcon(r"Icons/image.ico"), "Изображение", self)
         self._add_reference_action = QAction(QIcon(r"Icons/link.ico"), "Ссылку", self)
-        _inner_menu.addActions([self._add_image_action, self._add_reference_action])
-        _editing_menu.addMenu(_inner_menu)
+        _adding_menu.addActions([self._add_image_action, self._add_reference_action])
+        _editing_menu.addMenu(_adding_menu)
+                # submenu for formatting
+        formatting_menu = QMenu("Форматировать", self)
+        self.compression_action = QAction("Сжать html", self)
+        self.formatting_actions = QAction("Форматировать html", self)
+        formatting_menu.addActions([self.compression_action, self.formatting_actions])
+        _editing_menu.addMenu(formatting_menu)
+
+    def init_view_menu(self, _menu_bar):
         # creating view menu
         _view_menu = _menu_bar.addMenu("Просмотр")
         self._markdown_action = QAction(Constants.ACTIONS_STATE[0] + " markdown", self)
@@ -54,16 +75,20 @@ class View(QMainWindow):
         self._preview_action = QAction(Constants.ACTIONS_STATE[0] + " html превью", self)
         _view_menu.addActions([self._markdown_action, self._html_editor_action, self._preview_action])
 
-        #Toolbar
-        self.file_toolbar = self.addToolBar("files")
+    def init_file_toolbar(self):
+        # toolbar for file actions
+        self.file_toolbar = self.addToolBar("Файл")
         self.file_toolbar.addActions([self._new_action, self._open_action, self._save_action])
 
-        self.edit_toolbar = self.addToolBar("edit")
+    def init_adding_toolbar(self):
+        # toolbar for adding actions
+        self.edit_toolbar = self.addToolBar("Изменить")
         self.edit_toolbar.addActions([self._add_image_action, self._add_reference_action])
 
-
-
-        self.mapper = QSignalMapper(self)
+    def init_formattin_toolbar(self):
+        #toolbar for format actions
+        self.format_toolbar = self.addToolBar("Форматировать")
+        self.format_toolbar.addActions([self.compression_action, self.formatting_actions])
 
     def add_recent_document(self, file_path):
         recentFileAction = QAction(str(file_path), self)

@@ -1,6 +1,8 @@
 import Constants
 import markdown
-
+import re
+from html.parser import HTMLParser
+from html5print import HTMLBeautifier
 
 class Controller:
     def __init__(self, model, view):
@@ -25,6 +27,10 @@ class Controller:
         # insert actions
         self.VIEW._add_image_action.triggered.connect(self.add_image)
         self.VIEW._add_reference_action.triggered.connect(self.add_reference)
+
+        #formatting actions
+        self.VIEW.compression_action.triggered.connect(self.compress_html)
+        self.VIEW.formatting_actions.triggered.connect(self.format_html)
 
         # ссылка на обработчик переключения вкладки
         self.VIEW.tabs.currentChanged.connect(self.tabChangedSlot)
@@ -62,6 +68,10 @@ class Controller:
         # insert actions
         self.VIEW._add_image_action.setDisabled(value)
         self.VIEW._add_reference_action.setDisabled(value)
+
+        # formatting actions
+        self.VIEW.compression_action.setDisabled(value)
+        self.VIEW.formatting_actions.setDisabled(value)
 
     def refresh_recent_documents(self):
         if len(self.MODEL.RECENT_DOCUMENTS) > 0:
@@ -127,6 +137,16 @@ class Controller:
             return
         str = "[setNamePlease]" + "(" + url + ")\n"
         self.VIEW.append_string(str)
+
+    def compress_html(self):
+        html = self.VIEW.get_active_html_edit().toPlainText()
+        html = re.sub('[\n\t\r]', '', html)
+        self.VIEW.set_html_editor(html)
+
+    def format_html(self):
+        html = self.VIEW.get_active_html_edit().toPlainText()
+        html = HTMLBeautifier.beautify(html, 4)
+        self.VIEW.set_html_editor(html)
 
     def markdown_show_hide(self):
         markdown = self.VIEW.get_active_input()
