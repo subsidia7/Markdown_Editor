@@ -5,6 +5,8 @@ SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 480
 CONFIG_FILE = "user.json"
 
+ACTIONS_STATE = {0: "Скрыть", 1: "Показать"}
+
 HTML_CONTENT = "<!DOCTYPE html>\n"\
                 "<html lang=\"en\">\n"\
                 "<head>\n"\

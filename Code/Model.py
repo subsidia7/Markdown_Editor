@@ -1,5 +1,7 @@
 import Constants
 import json
+import os
+
 
 class Model:
     # Active tabs
@@ -7,14 +9,16 @@ class Model:
         self.ACTIVE_TAB = 0
         self.FILE_PATH = Constants.EMPTY_PATH
         self.TABS = []
+        self.markdown_state = 0
+        self.html_state = 0
+        self.preview_state = 0
         self.RECENT_DOCUMENTS = self.get_recent_documents()
 
     def get_recent_documents(self):
-        #result = self.get_file_content(Constants.CONFIG_FILE)
         db = open(Constants.CONFIG_FILE)
         data = json.load(db)
         if "recent_documents" in data and type(data) is not None:
-           return data["recent_documents"]
+            return data["recent_documents"]
         else:
             return[]
 
@@ -22,10 +26,28 @@ class Model:
         splitted = self.FILE_PATH.split('/')
         return splitted[-1]
 
+    def get_file_title(self):
+        fname = self.get_file_name()
+        return os.path.splitext(fname)[0]
+
     def append_document(self, file_path):
-        self.TABS.append({"path": file_path})
+        self.TABS.append({"path": file_path,
+                          "markdown_state": 0,
+                          "html_state": 0,
+                          "preview_state": 0})
         self.ACTIVE_TAB = len(self.TABS) - 1
         self.set_document_path(file_path)
+        self.set_document_view_states()
+
+    def set_document_view_states(self):
+        self.markdown_state = self.TABS[self.ACTIVE_TAB]["markdown_state"]
+        self.html_state = self.TABS[self.ACTIVE_TAB]["html_state"]
+        self.preview_state = self.TABS[self.ACTIVE_TAB]["preview_state"]
+
+    def update_tab_view_states(self):
+        self.TABS[self.ACTIVE_TAB]["markdown_state"] =  self.markdown_state
+        self.TABS[self.ACTIVE_TAB]["html_state"] = self.html_state
+        self.TABS[self.ACTIVE_TAB]["preview_state"] = self.preview_state
 
     def set_document_path(self, file_path):
         self.FILE_PATH = file_path

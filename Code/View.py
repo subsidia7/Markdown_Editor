@@ -49,9 +49,9 @@ class View(QMainWindow):
         _editing_menu.addMenu(_inner_menu)
         # creating view menu
         _view_menu = _menu_bar.addMenu("Просмотр")
-        self._markdown_action = QAction("Показать/Скрыть markdown", self)
-        self._html_editor_action = QAction("Показать/Скрыть html markup", self)
-        self._preview_action = QAction("Показать/Скрыть html превью", self)
+        self._markdown_action = QAction(Constants.ACTIONS_STATE[0] + " markdown", self)
+        self._html_editor_action = QAction(Constants.ACTIONS_STATE[0] + " html markup", self)
+        self._preview_action = QAction(Constants.ACTIONS_STATE[0] + " html превью", self)
         _view_menu.addActions([self._markdown_action, self._html_editor_action, self._preview_action])
 
         #Toolbar
@@ -139,10 +139,10 @@ class View(QMainWindow):
             return False
 
     def select_file(self, type_file="*.md"):
-        fname, _ = QFileDialog.getOpenFileName(self, 'Select file', "", type_file)
+        fname, type = QFileDialog.getOpenFileName(self, 'Select file', "", type_file)
         print("Selected file: " + fname)
         if fname:
-            return fname
+            return (fname, type)
         else:
             return False
 

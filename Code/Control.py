@@ -1,6 +1,5 @@
 import Constants
 import markdown
-import string
 
 
 class Controller:
@@ -43,6 +42,11 @@ class Controller:
 
     def tabChangedSlot(self, argTabIndex):
         self.MODEL.ACTIVE_TAB = argTabIndex
+        if argTabIndex != -1:
+            self.MODEL.set_document_view_states()
+            self.VIEW._markdown_action.setText(Constants.ACTIONS_STATE[self.MODEL.markdown_state] + " markdown")
+            self.VIEW._html_editor_action.setText(Constants.ACTIONS_STATE[self.MODEL.html_state] + " html markup")
+            self.VIEW._preview_action.setText(Constants.ACTIONS_STATE[self.MODEL.preview_state] + " preview")
 
     def dangerous_actions_set_disabled(self, value):
         # file actions
@@ -79,10 +83,8 @@ class Controller:
         self.set_init_html()
 
     def set_init_html(self):
-        name = self.MODEL.get_file_name()
-        name = name[:name.find('.')]
+        name = self.MODEL.get_file_title()
         init_tags = Constants.HTML_CONTENT
-        input = self.VIEW.get_active_input()
         content = self.VIEW.get_current_document_content()
         init_tags = init_tags.format(name, content)
         self.VIEW.set_html_editor(init_tags)
@@ -135,21 +137,29 @@ class Controller:
 
     def markdown_show_hide(self):
         markdown = self.VIEW.get_active_input()
-        self.show_hide_widget(markdown)
+        self.MODEL.markdown_state = self.show_hide_widget(markdown)
+        self.MODEL.update_tab_view_states()
+        self.VIEW._markdown_action.setText(Constants.ACTIONS_STATE[self.MODEL.markdown_state] + " markdown")
 
     def html_edit_show_hide(self):
         html_edit = self.VIEW.get_active_html_edit()
-        self.show_hide_widget(html_edit)
+        self.MODEL.html_state = self.show_hide_widget(html_edit)
+        self.MODEL.update_tab_view_states()
+        self.VIEW._html_editor_action.setText(Constants.ACTIONS_STATE[self.MODEL.html_state] + " html markup")
 
     def preview_show_hide(self):
         preview = self.VIEW.get_active_preview()
-        self.show_hide_widget(preview)
+        self.MODEL.preview_state = self.show_hide_widget(preview)
+        self.MODEL.update_tab_view_states()
+        self.VIEW._preview_action.setText(Constants.ACTIONS_STATE[self.MODEL.preview_state] + " preview")
 
     def show_hide_widget(self, widget):
         if widget.isHidden():
             widget.show()
+            return 0 # state of showen widget
         else:
             widget.hide()
+            return 1 # state of hidden widget
 
     def open_file_path(self, file_path):
         file_content = self.MODEL.get_file_content(file_path)
