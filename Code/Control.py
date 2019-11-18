@@ -32,6 +32,10 @@ class Controller:
         self.VIEW.compression_action.triggered.connect(self.compress_html)
         self.VIEW.formatting_actions.triggered.connect(self.format_html)
 
+        #(Ctrl + Z) and (Ctrl + Shift + Z) actions
+        self.VIEW.cancel_action.triggered.connect(self.cancel_last)
+        self.VIEW.repeat_action.triggered.connect(self.repeat_last)
+
         # ссылка на обработчик переключения вкладки
         self.VIEW.tabs.currentChanged.connect(self.tabChangedSlot)
         # ссылка на обработчик закрытия вкладки
@@ -72,6 +76,10 @@ class Controller:
         # formatting actions
         self.VIEW.compression_action.setDisabled(value)
         self.VIEW.formatting_actions.setDisabled(value)
+
+        #Ctrl + ... actions
+        self.VIEW.cancel_action.setDisabled(value)
+        self.VIEW.repeat_action.setDisabled(value)
 
     def refresh_recent_documents(self):
         if len(self.MODEL.RECENT_DOCUMENTS) > 0:
@@ -147,6 +155,14 @@ class Controller:
         html = self.VIEW.get_active_html_edit().toPlainText()
         html = HTMLBeautifier.beautify(html, 4)
         self.VIEW.set_html_editor(html)
+
+    def cancel_last(self):
+        input_edit = self.VIEW.get_active_input()
+        input_edit.undo()
+
+    def repeat_last(self):
+        input_edit = self.VIEW.get_active_input()
+        input_edit.redo()
 
     def markdown_show_hide(self):
         markdown = self.VIEW.get_active_input()

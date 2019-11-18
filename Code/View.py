@@ -32,9 +32,11 @@ class View(QMainWindow):
         self.init_file_menu(_menu_bar)
         self.init_edditing_menu(_menu_bar)
         self.init_view_menu(_menu_bar)
+        self.init_last_toolbar()
         self.init_file_toolbar()
         self.init_adding_toolbar()
         self.init_formattin_toolbar()
+
         # mapper for recent files
         self.mapper = QSignalMapper(self)
 
@@ -67,6 +69,10 @@ class View(QMainWindow):
         formatting_menu.addActions([self.compression_action, self.formatting_actions])
         _editing_menu.addMenu(formatting_menu)
 
+        self.cancel_action = QAction(QIcon(r"Icons/cancel.ico"), "Отмена", self)
+        self.repeat_action = QAction(QIcon(r"Icons/repeat.ico"), "Повтор", self)
+        _editing_menu.addActions([self.cancel_action,self.repeat_action])
+
     def init_view_menu(self, _menu_bar):
         # creating view menu
         _view_menu = _menu_bar.addMenu("Просмотр")
@@ -74,6 +80,10 @@ class View(QMainWindow):
         self._html_editor_action = QAction(Constants.ACTIONS_STATE[0] + " html markup", self)
         self._preview_action = QAction(Constants.ACTIONS_STATE[0] + " html превью", self)
         _view_menu.addActions([self._markdown_action, self._html_editor_action, self._preview_action])
+
+    def init_last_toolbar(self):
+        self.cr_toolbar = self.addToolBar("ПоследниеДействия")
+        self.cr_toolbar.addActions([self.cancel_action, self.repeat_action])
 
     def init_file_toolbar(self):
         # toolbar for file actions
