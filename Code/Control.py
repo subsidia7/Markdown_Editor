@@ -126,7 +126,7 @@ class Controller:
             self.MODEL.write_file_content(file_path, content)
 
     def add_image(self):
-        file_path = self.VIEW.select_file("*.jpg *.png")
+        file_path, type = self.VIEW.select_file("*.jpg *.png")
         if file_path != False:
             str = "![setNamePlease]" + "(" + file_path + ")\n"
             self.VIEW.append_string(str)
@@ -140,7 +140,7 @@ class Controller:
 
     def compress_html(self):
         html = self.VIEW.get_active_html_edit().toPlainText()
-        html = re.sub('[\n\t\r]', '', html)
+        html = re.sub('[\n\t\r ]', '', html)
         self.VIEW.set_html_editor(html)
 
     def format_html(self):

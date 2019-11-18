@@ -163,13 +163,13 @@ class View(QMainWindow):
         else:
             return False
 
-    def select_file(self, type_file="*.md"):
+    def select_file(self, type_file="*.md *.txt"):
         fname, type = QFileDialog.getOpenFileName(self, 'Select file', "", type_file)
         print("Selected file: " + fname)
         if fname:
-            return (fname, type)
+            return fname, type
         else:
-            return False
+            return False, False
 
     def get_input_dialog_text(self):
         text, ok_pressed = QInputDialog.getText(self, "Добавление ссылки", "Введите URL для ссылки:", QLineEdit.Normal, "")
