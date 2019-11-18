@@ -2,7 +2,7 @@ import Constants
 import MarkdownHighlighter
 import HtmlHighlighter
 from PyQt5.QtWidgets import QMainWindow, QWidget, QAction, QMenu, QFileDialog, QTextEdit, QDesktopWidget, QHBoxLayout,\
-    QTabWidget, QLineEdit, QInputDialog
+    QTabWidget, QLineEdit, QInputDialog, qApp
 from PyQt5.QtCore import QSignalMapper
 from PyQt5.QtGui import QIcon
 
@@ -47,11 +47,16 @@ class View(QMainWindow):
         self._open_action = QAction(QIcon(r"Icons/folder.ico"), "Открыть файл", self)
         self._save_action = QAction(QIcon(r"Icons/save.ico"), "Сохранить", self)
         self._save_AS_action = QAction("Сохранить как", self)
-        self._export_html = QAction("Экспорт в HTML", self)
+        self._export_html = QAction(QIcon(r"Icons/code.ico"), "Экспорт в HTML", self)
         self._recent_menu = QMenu("Недавние файлы", self)
-        _file_menu.addActions([self._new_action, self._open_action, self._save_action, self._save_AS_action,
-                               self._export_html])
+        self.exit_action = QAction(QIcon(r"Icons/exit.ico"),"Выход", self)
+        _file_menu.addActions([self._new_action, self._open_action])
         _file_menu.addMenu(self._recent_menu)
+        _file_menu.addActions([self._save_action, self._save_AS_action, self._export_html])
+        _file_menu.addAction(self.exit_action)
+        self.exit_action.triggered.connect(qApp.quit)
+        _file_menu.insertSeparator(self._save_action)
+        _file_menu.insertSeparator(self.exit_action)
 
     def init_edditing_menu(self, _menu_bar):
         # creating editing menu
@@ -64,8 +69,8 @@ class View(QMainWindow):
         _editing_menu.addMenu(_adding_menu)
                 # submenu for formatting
         formatting_menu = QMenu("Форматировать", self)
-        self.compression_action = QAction("Сжать html", self)
-        self.formatting_actions = QAction("Форматировать html", self)
+        self.compression_action = QAction(QIcon(r"Icons/string.ico"),"Сжать html", self)
+        self.formatting_actions = QAction(QIcon(r"Icons/format.ico"),"Форматировать html", self)
         formatting_menu.addActions([self.compression_action, self.formatting_actions])
         _editing_menu.addMenu(formatting_menu)
 
