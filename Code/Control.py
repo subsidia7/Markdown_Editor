@@ -148,7 +148,9 @@ class Controller:
 
     def compress_html(self):
         html = self.VIEW.get_active_html_edit().toPlainText()
-        html = re.sub('[\n\t\r ]', '', html)
+        html = re.sub(r'\s+<', '<', html)
+        html = re.sub('[\n\t\r ]', ' ', html)
+        html = re.sub(r'>\s+', '>', html)
         self.VIEW.set_html_editor(html)
 
     def format_html(self):
