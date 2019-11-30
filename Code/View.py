@@ -71,7 +71,8 @@ class View(QMainWindow):
         formatting_menu = QMenu("Форматировать", self)
         self.compression_action = QAction(QIcon(r"Icons/string.ico"),"Сжать html", self)
         self.formatting_actions = QAction(QIcon(r"Icons/format.ico"),"Форматировать html", self)
-        formatting_menu.addActions([self.compression_action, self.formatting_actions])
+        self.default_previev_action = QAction(QIcon(r"Icons/default.ico"),"По умолчанию", self)
+        formatting_menu.addActions([self.compression_action, self.formatting_actions, self.default_previev_action])
         _editing_menu.addMenu(formatting_menu)
 
         self.cancel_action = QAction(QIcon(r"Icons/cancel.ico"), "Отмена", self)
@@ -103,7 +104,7 @@ class View(QMainWindow):
     def init_formattin_toolbar(self):
         #toolbar for format actions
         self.format_toolbar = self.addToolBar("Форматировать")
-        self.format_toolbar.addActions([self.compression_action, self.formatting_actions])
+        self.format_toolbar.addActions([self.compression_action, self.formatting_actions, self.default_previev_action])
 
     def add_recent_document(self, file_path):
         recentFileAction = QAction(str(file_path), self)

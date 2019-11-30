@@ -10,7 +10,6 @@ class Controller:
         self.VIEW = view
         self.set_triggers()
         self.dangerous_actions_set_disabled(True)
-
     def set_triggers(self):
         # file actions
         self.VIEW._new_action.triggered.connect(self.new_file)
@@ -31,6 +30,7 @@ class Controller:
         #formatting actions
         self.VIEW.compression_action.triggered.connect(self.compress_html)
         self.VIEW.formatting_actions.triggered.connect(self.format_html)
+        self.VIEW.default_previev_action.triggered.connect(self.default_html)
 
         #(Ctrl + Z) and (Ctrl + Shift + Z) actions
         self.VIEW.cancel_action.triggered.connect(self.cancel_last)
@@ -76,6 +76,7 @@ class Controller:
         # formatting actions
         self.VIEW.compression_action.setDisabled(value)
         self.VIEW.formatting_actions.setDisabled(value)
+        self.VIEW.default_previev_action.setDisabled(value)
 
         #Ctrl + ... actions
         self.VIEW.cancel_action.setDisabled(value)
@@ -96,6 +97,7 @@ class Controller:
         if self.MODEL.ACTIVE_TAB == 0:
             self.dangerous_actions_set_disabled(False)
         # setting trigger to Text Editor
+        self.VIEW.default_previev_action.setDisabled(True)
         inputEdit = self.VIEW.get_active_input()
         inputEdit.textChanged.connect(self.change_html_preview)
         self.change_html_preview()
@@ -107,6 +109,7 @@ class Controller:
             self.change_html_preview()
             if self.MODEL.ACTIVE_TAB == 0:
                 self.dangerous_actions_set_disabled(False)
+                self.VIEW.default_previev_action.setDisabled(True)
 
     def save_file(self):
         if self.MODEL.FILE_PATH == Constants.EMPTY_PATH:
@@ -146,14 +149,30 @@ class Controller:
         str = "[setNamePlease]" + "(" + url + ")\n"
         self.VIEW.append_string(str)
 
+    def default_html(self):
+        self.VIEW.default_previev_action.setDisabled(True)
+        self.VIEW.get_active_input().setReadOnly(False)
+        self.VIEW.formatting_actions.setDisabled(False)
+        self.VIEW.compression_action.setDisabled(False)
+        self.change_html_preview()
+
+
     def compress_html(self):
         html = self.VIEW.get_active_html_edit().toPlainText()
+        self.VIEW.compression_action.setDisabled(True)
+        self.VIEW.get_active_input().setReadOnly(True)
+        self.VIEW.formatting_actions.setDisabled(False)
+        self.VIEW.default_previev_action.setDisabled(False)
         html = re.sub(r'\s+<', '<', html)
         html = re.sub('[\n\t\r ]', ' ', html)
         html = re.sub(r'>\s+', '>', html)
         self.VIEW.set_html_editor(html)
 
     def format_html(self):
+        self.VIEW.get_active_input().setReadOnly(False)
+        self.VIEW.formatting_actions.setDisabled(True)
+        self.VIEW.default_previev_action.setDisabled(False)
+        self.VIEW.compression_action.setDisabled(False)
         html = self.VIEW.get_active_html_edit().toPlainText()
         html = HTMLBeautifier.beautify(html, 4)
         self.VIEW.set_html_editor(html)
@@ -217,5 +236,7 @@ class Controller:
         content = self.VIEW.get_active_input().toPlainText()
         content = markdown.markdown(content)
         init_tags = init_tags.format(name, content)
-        self.VIEW.set_html_editor(init_tags)
         self.VIEW.set_preview(init_tags)
+        if(self.VIEW.default_previev_action.isEnabled() == True):
+            init_tags = HTMLBeautifier.beautify(init_tags, 4)
+        self.VIEW.set_html_editor(init_tags)
